@@ -115,8 +115,9 @@ class Sparql(BrowserView):
             res, error = {}, None
             try:
                 res = self.context.execute(**arg_values)
-            except Exception:
+            except Exception, err:
                 import traceback
+                logger.exception(err)
                 error = traceback.format_exc()
             data = res.get('result')
             error = error or res.get('exception')
@@ -140,20 +141,23 @@ class Sparql(BrowserView):
 
         column_types = kwargs.get('column_types')
         annotations = kwargs.get('annotations')
-        return sortProperties(json.dumps(
-            sparql2json(data,
-                        column_types=column_types,
-                        annotations=annotations)
-        ))
+        try:
+            return sortProperties(json.dumps(
+                sparql2json(data,
+                            column_types=column_types,
+                            annotations=annotations)
+            ))
+        except KeyError, err:
+            logger.warn(err)
 
     def sparql2exhibit(self):
         """ Download sparql results as Exhibit JSON
         """
-
         try:
             data = sparql2json(self.context.execute_query(
                 self.getArgumentMap()))
-        except Exception:
+        except Exception, err:
+            logger.exception(err)
             data = {'properties':{}, 'items':{}}
 
         self.request.response.setHeader(
@@ -166,11 +170,17 @@ class Sparql(BrowserView):
     def sparql2html(self):
         """ Download sparql results as HTML
         """
+        if not self.getExportStatus():
+            self.request.response.setStatus(500)
+            return 'Error: %s' % self.context.exportStatusMessage
+
         try:
             data = sparql2json(self.context.execute_query(
                 self.getArgumentMap()))
-        except Exception:
+        except Exception, err:
             data = {'properties':{}, 'items':{}}
+            logger.exception(err)
+
 
         result = []
         result.append(u"<style type='text/css'>")
@@ -205,11 +215,16 @@ class Sparql(BrowserView):
     def sparql2csv(self, dialect='excel'):
         """ Download sparql results as Comma Separated File
         """
+        if not self.getExportStatus():
+            self.request.response.setStatus(500)
+            return 'Error: %s' % self.context.exportStatusMessage
+
         try:
             data = sparql2json(self.context.execute_query(
                 self.getArgumentMap()))
-        except Exception:
+        except Exception, err:
             data = {'properties':{}, 'items':{}}
+            logger.exception(err)
 
         if dialect == 'excel':
             self.request.response.setHeader(
@@ -355,6 +370,22 @@ class Sparql(BrowserView):
         """
         return json.dumps([[x.title, x.absolute_url()]
                             for x in self.context.getBRefs() if x])
+
+    def getExportStatus(self):
+        """
+        """
+        if not getattr(self.context, 'exportWorks', True):
+            api.portal.show_message(
+                    message="There is an error, HTML/CSV/TSV conversions not " \
+                            "possible: %s" % self.context.exportStatusMessage,
+                    request=self.request, type='warning')
+            return False
+        return True
+
+    def __call__(self):
+        self.getExportStatus()
+        return self.index()
+
 
 class SparqlBookmarksFolder(Sparql):
     """SparqlBookmarksFolder view"""

@@ -8,7 +8,8 @@
         tal:define="options view/test_query;
                     isDaviz view/isDavizInstalled;
                     arguments view/getArguments;
-                    arguments python: '?' + arguments if arguments else ''">
+                    arguments python: '?' + arguments if arguments else '';
+                    exportStatus view/getExportStatus">
 
      <h3 i18n:translate="">Download this dataset</h3>
      <label i18n:translate="">Formats suitable for human consumption</label>

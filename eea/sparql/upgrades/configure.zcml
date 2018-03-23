@@ -2,6 +2,19 @@
   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
   i18n_domain="eea">
 
+  <!-- 5.2 => 6.6 -->
+  <genericsetup:upgradeSteps
+    source="5200"
+    destination="6600"
+    profile="eea.sparql:default">
+
+    <genericsetup:upgradeStep
+      title="Set export status to sparql objects"
+      handler="eea.sparql.upgrades.evolve6600.set_sparql_export_attribute"
+    />
+
+  </genericsetup:upgradeSteps>
+
   <!-- 4.5 => 5.2 -->
   <genericsetup:upgradeSteps
     source="4500"

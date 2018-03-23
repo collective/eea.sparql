@@ -46,6 +46,7 @@ from eea.versions import versions
 from eea.versions.interfaces import IVersionEnhanced, IGetVersions
 from eea.sparql.async import IAsyncService
 from plone.app.blob.field import BlobField
+from eea.sparql.converter.sparql2json import sparql2json
 logger = logging.getLogger("eea.sparql")
 
 RESULTS_TYPES = {
@@ -279,6 +280,7 @@ class Sparql(base.ATCTContent, ZSPARQLMethod):
     def setSparqlCacheResults(self, result):
         """ Set Sparql Cache results
         """
+        self.updateExportStatus(result)
         self.sparql_results_are_cached = True
         self.setSparql_results_cached(cPickle.dumps(result))
 
@@ -409,6 +411,22 @@ class Sparql(base.ATCTContent, ZSPARQLMethod):
             cached_result['exception'] = new_result['exception']
             self.setSparqlCacheResults(cached_result)
 
+    security.declareProtected(view, 'updateExportStatus')
+    def updateExportStatus(self, result):
+        """ Update export status of HTML/CSV/TSV
+        """
+        setattr(self, 'exportWorks', True)
+        try:
+            setattr(self, 'exportWorks', True)
+            setattr(self, 'exportStatusMessage', '')
+            sparql2json(result)
+        except Exception, err:
+            logger.exception(err)
+            setattr(self, 'exportWorks', False)
+            setattr(self, 'exportStatusMessage', err)
+        self._p_changed = True
+        self.reindexObject()
+
     security.declareProtected(view, 'execute')
     def execute(self, **arg_values):
         """ override execute, if possible return the last working results
@@ -460,7 +478,7 @@ def async_updateOtherCachedFormats(obj, scheduled_at, endpoint, query,
             result = new_result['result'].read()
         except Exception:
             result = ""
-            logger.exception(
+            logger.warn(
                 "Unable to read result from query: %s with %s\n %s \n %s",
                 "/".join(obj.getPhysicalPath()), _type, endpoint, query
             )

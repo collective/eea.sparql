@@ -158,3 +158,13 @@ p.sparql-has-result .boolean {
 
 .eea-sparql-downloads {
 }
+
+#region-content .warning {
+    width: 85%;
+}
+
+@media screen and (max-width: 520px) {
+    #region-content .warning {
+        width: 66%;
+    }
+}
