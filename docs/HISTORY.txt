@@ -1,8 +1,17 @@
 Changelog
 =========
 
+6.7 - (2018-04-04)
+------------------
+* Bug fix: regression fix for bug introduced in previest egg release.
+  Removed call method for Sparql browserView as we have code
+  calling the sparql within eea.daviz and eea.googlecharts which breaks
+  and the template itself calls the checking for the integrity of export
+  data
+  [ichim-david refs #94465]
+
 6.6 - (2018-03-21)
------------------------
+------------------
 * Upgrade step: added upgrade steps in order to set the exportWorks attribute
   for sparql objects
 * Change: Added loggers, a check regarding the status of the html/csv/tsv export

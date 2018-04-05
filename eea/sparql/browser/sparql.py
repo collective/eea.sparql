@@ -375,16 +375,8 @@ class Sparql(BrowserView):
         """
         """
         if not getattr(self.context, 'exportWorks', True):
-            api.portal.show_message(
-                    message="There is an error, HTML/CSV/TSV conversions not " \
-                            "possible: %s" % self.context.exportStatusMessage,
-                    request=self.request, type='warning')
             return False
         return True
-
-    def __call__(self):
-        self.getExportStatus()
-        return self.index()
 
 
 class SparqlBookmarksFolder(Sparql):
