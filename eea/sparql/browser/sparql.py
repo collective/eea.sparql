@@ -369,7 +369,7 @@ class Sparql(BrowserView):
         """ Items what are back related to this query
         """
         return json.dumps([[x.title, x.absolute_url()]
-                            for x in self.context.getBRefs() if x])
+                            for x in self.context.getBRefs('relatesTo') if x])
 
     def getExportStatus(self):
         """
