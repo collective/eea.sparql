@@ -490,7 +490,7 @@ class QuickPreview(BrowserView):
                 result = run_with_timeout(tmp_timeout,
                                             query_and_get_result,
                                             *args)
-                data = result.get('result')
+                data = result.get('result', {})
                 error = error or result.get('exception')
             except Exception:
                 import traceback
