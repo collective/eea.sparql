@@ -1,6 +1,13 @@
 Changelog
 =========
 
+7.1 - (2019-08-01)
+---------------------
+* Bug fix: fixed setup.py metadata
+  [alecghica refs #108090]
+* Bug fix: Avoid memory-leak generator ContentHistoryView while getting Sparql info on view
+  [avoinea refs #108090]
+
 7.0 - (2019-01-28)
 ---------------------
 * Jenkins: Add sonarqube step

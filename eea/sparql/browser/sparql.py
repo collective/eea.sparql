@@ -12,7 +12,6 @@ import re
 import DateTime
 
 from plone import api
-from plone.app.layout.viewlets.content import ContentHistoryView
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from Products.ZSPARQLMethod.Method import interpolate_query
@@ -87,15 +86,18 @@ class Sparql(BrowserView):
         """ Parses the history and returns the last entry when
             the query has run.
         """
+        rt = getToolByName(self.context, "portal_repository")
+        if not rt.isVersionable(self.context):
+            return {}
+
         try:
-            history = ContentHistoryView(self.context,
-                self.request).fullHistory()
-        except Exception:
-            history = []
-        r = None
-        if history:
-            r = history[0]
-        return r
+            history = rt.getHistoryMetadata(self.context)
+            latest = history.getLength(countPurged=False) - 1
+            version = history.retrieve(latest, countPurged=False)
+            return version.get("metadata", {}).get("sys_metadata", {})
+        except Exception as err:
+            logger.warn(err)
+            return {}
 
     def test_query(self):
         """test query"""
