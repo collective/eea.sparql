@@ -1,6 +1,10 @@
 Changelog
 =========
 
+7.2 - (2019-08-05)
+---------------------
+* Change: Fix MANIFEST.in file [valentinab25]
+
 7.1 - (2019-08-01)
 ---------------------
 * Bug fix: fixed setup.py metadata
