@@ -36,6 +36,16 @@ table.sparql-results th {
 
 table.sparql-results td {
     vertical-align: middle;
+    padding: 8px;
+}
+.sparql-results tbody {
+    display: table-row-group;
+}
+.results_text {
+    display: block;
+    max-width: 200px;
+    max-height: 36px;
+    overflow: hidden;
 }
 
 p.sparql-stats .number {

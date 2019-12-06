@@ -11,8 +11,10 @@
     </thead>
     <tbody>
       <tr tal:repeat="row python: data['rows'][:10]" tal:attributes="class string:row_${repeat/row/index}">
-        <td tal:repeat="value row"
-            tal:content="value/n3|string:&quot;${value}&quot;"/>
+        <td tal:repeat="value row">
+          <span class="results_text" tal:content="value/n3|string:&quot;${value}&quot;">
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>

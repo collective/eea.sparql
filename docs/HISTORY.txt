@@ -1,31 +1,37 @@
 Changelog
 =========
 
+7.3 - (2019-12-02)
+---------------------------
+* Bug fix: fixed height of sparql results when results have large
+  text results
+  [ichim-david  refs #111794]
+
 7.2 - (2019-08-05)
----------------------
+--------------------------
 * Change: Fix MANIFEST.in file [valentinab25]
 
 7.1 - (2019-08-01)
----------------------
+--------------------------
 * Bug fix: fixed setup.py metadata
   [alecghica refs #108090]
 * Bug fix: Avoid memory-leak generator ContentHistoryView while getting Sparql info on view
   [avoinea refs #108090]
 
 7.0 - (2019-01-28)
----------------------
+--------------------------
 * Jenkins: Add sonarqube step
   [avoinea refs #101552]
 
 6.9 - (2018-12-11)
----------------------
+--------------------------
 * Change: updated URLs pointing to eea.europa.eu with https://
   [alecghica refs #95849]
 * Bug fix: fixed error display on running a SPARQL query
   [alecghica refs #100666]
 
 6.8 - (2018-05-30)
----------------------
+--------------------------
 * Bug fix: Restrict getBRefs only to related items
   [avoinea refs #95796]
 
