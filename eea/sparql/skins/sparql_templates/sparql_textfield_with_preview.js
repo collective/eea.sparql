@@ -1,11 +1,11 @@
 function preview_sparql() {
     var ajax_data = {
-            "endpoint" : jQuery("#endpoint_url").attr("value"),
-            "timeout" : jQuery("#timeout").attr("value"),
+            "endpoint" : jQuery("#endpoint_url").prop("value"),
+            "timeout" : jQuery("#timeout").prop("value"),
             "arg_spec" : "",
-            "sparql_query" : jQuery("#sparql_query").attr("value")
+            "sparql_query" : jQuery("#sparql_query").prop("value")
     };
-    var preview_arguments = jQuery(".sparql-preview-arguments").attr("value");
+    var preview_arguments = jQuery(".sparql-preview-arguments").prop("value");
     var args_list = preview_arguments.split("&");
     jQuery.each(args_list, function(idx, arg) {
         args = arg.split("=");
@@ -13,9 +13,9 @@ function preview_sparql() {
     });
     var argspec = jQuery("input[name='arg_spec.name:records']");
     jQuery.each(argspec, function(idx, spec) {
-        value = jQuery(spec).attr("value");
-        if (value !== undefined) {
-            ajax_data.arg_spec += jQuery(spec).attr("value") + " ";
+        value = jQuery(spec).prop("value");
+        if (value) {
+            ajax_data.arg_spec += value + " ";
         }
     });
 
@@ -32,7 +32,7 @@ function preview_sparql() {
             var sparql_preview = jQuery("<div class='sparql_preview'></div>");
             jQuery(data).appendTo(sparql_preview);
             sparql_preview.dialog({
-                title: "Preview for " + jQuery("#title").attr("value"),
+                title: "Preview for " + jQuery("#title").prop("value"),
                 modal: true,
                 width: 'auto',
                 create: function() {
@@ -45,7 +45,7 @@ function preview_sparql() {
 }
 
 function sparql_setstatic() {
-    if (jQuery("#sparql_static").attr("checked")) {
+    if (jQuery("#sparql_static").prop("checked")) {
         jQuery("#endpoint_url").attr("readonly", true);
         jQuery("#timeout").attr("disabled", true);
         jQuery("#arg_spec").attr("readonly", true);
